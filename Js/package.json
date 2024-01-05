@@ -1,0 +1,27 @@
+{
+  "name": "alignments",
+  "version": "0.0.1",
+  "description": "Align text horizontally",
+  "types": "dist/index.d.ts",
+  "main": "index.esm.js",
+  "type": "module",
+  "scripts": {
+    "start": "vite-node ./main.ts",
+    "test": "vite-node ./test/normal.test.ts",
+    "build": "rollup -c rollup.config.js"
+  },
+  "keywords": [
+    "alignment",
+    "Js alignment"
+  ],
+  "author": "Sparrow",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "rollup": "^4.9.3",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.3.3",
+    "vite-node": "^1.1.2"
+  }
+}
