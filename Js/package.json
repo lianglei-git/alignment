@@ -1,6 +1,6 @@
 {
   "name": "alignments",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Align text horizontally",
   "types": "dist/index.d.ts",
   "main": "index.esm.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "start": "vite-node ./main.ts",
     "test": "vite-node ./test/normal.test.ts",
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollup.config.js && cp ./package.json ./dist/"
   },
   "keywords": [
     "alignment",

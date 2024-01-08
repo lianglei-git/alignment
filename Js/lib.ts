@@ -3,7 +3,7 @@
 type IAlignmentResult = {
     singleByte_max: number;
     doubleByte_max: number;
-    results: string[]
+    results: string[][]
 }
 type IAlignmentParams = {
     doubleByteReplacement?: string
@@ -34,14 +34,17 @@ function strlen(str: string) {
     return info;
 }
 
-function alignmentCore(strs: IAlignmentParams['strs']):IAlignmentResult 
-function alignmentCore(params: IAlignmentParams): IAlignmentResult 
+function alignmentCore(strs: IAlignmentParams['strs']): IAlignmentResult
+function alignmentCore(params: IAlignmentParams): IAlignmentResult
 function alignmentCore(params: any): IAlignmentResult {
-    if(Array.isArray(params)) {
-        params = {strs: params}
+    if (Array.isArray(params)) {
+        params = { strs: params }
     }
-    const { strs, doubleByteReplacement =  '\u3000', singleByteReplacement = '\u0020' } = params;
-    const result:any = {
+    if (!Array.isArray(params.strs[0])) {
+        params.strs = [params.strs];
+    }
+    const { strs, doubleByteReplacement = '\u3000', singleByteReplacement = '\u0020' } = params;
+    const result: any = {
         singleByte_max: 0,
         doubleByte_max: 0,
         results: [],
@@ -61,24 +64,27 @@ function alignmentCore(params: any): IAlignmentResult {
     })
 
     let isStartWhile = true;
-    const results: string[] = [];
+    const results: string[][] = [];
     while (isStartWhile) {
-        strs.forEach((content: string, idx: number) => {
-            let combination = content;
-            let len = strlen(combination)
-            if (len.singleByteLen < result.singleByte_max) {
-                combination += Array(result.singleByte_max - len.singleByteLen)
-                    .fill(singleByteReplacement)
-                    .join('');
-            }
-            if (len.doubleByteLen < result.doubleByte_max) {
-                combination += Array((result.doubleByte_max - len.doubleByteLen) >> 1)
-                    .fill(doubleByteReplacement)
-                    .join('');
-            }
-            results[idx] = combination;
-        });
-
+        for (let i = 0; i < strs.length; i++) {
+            results[i] = [];
+            const every = strs[i];
+            every.forEach((content: string, idx: number) => {
+                let combination = content;
+                let len = strlen(combination)
+                if (len.singleByteLen < result.singleByte_max) {
+                    combination += Array(result.singleByte_max - len.singleByteLen)
+                        .fill(singleByteReplacement)
+                        .join('');
+                }
+                if (len.doubleByteLen < result.doubleByte_max) {
+                    combination += Array((result.doubleByte_max - len.doubleByteLen) >> 1)
+                        .fill(doubleByteReplacement)
+                        .join('');
+                }
+                results[i][idx] = combination;
+            });
+        }
         isStartWhile = false;
     }
     result.results = results;
