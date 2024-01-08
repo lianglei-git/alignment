@@ -1,6 +1,6 @@
 {
   "name": "alignments",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Align text horizontally",
   "types": "dist/index.d.ts",
   "main": "index.esm.js",
