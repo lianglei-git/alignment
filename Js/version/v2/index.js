@@ -1,69 +1,64 @@
-
-let canvas, ctx: CanvasRenderingContext2D;
+var canvas, ctx;
 try {
     canvas = document.createElement('canvas');
-    ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-} catch (e) {
+    ctx = canvas.getContext('2d');
+}
+catch (e) {
     console.warn("No document, Please install node-canvas.js.");
 }
-
-
-function getTextWidth(text: string): number {
-    if (!ctx) return 0;
-    const metrics = ctx.measureText(text);
+function getTextWidth(text) {
+    if (!ctx)
+        return 0;
+    var metrics = ctx.measureText(text);
     return metrics.width;
 }
-
-function addSpacesToMatchWidth(text: string, maxWidth: number, spcae: string): string {
-    const textWidth = getTextWidth(text);
+function addSpacesToMatchWidth(text, maxWidth, spcae) {
+    var textWidth = getTextWidth(text);
     if (textWidth >= maxWidth) {
         return text;
     }
-    const spaceWidth = getTextWidth(spcae);
-    const requiredSpaces = Math.ceil((maxWidth - textWidth) / spaceWidth);
-    const spaces = spcae.repeat(requiredSpaces - 1);
+    var spaceWidth = getTextWidth(spcae);
+    var requiredSpaces = Math.ceil((maxWidth - textWidth) / spaceWidth);
+    var spaces = spcae.repeat(requiredSpaces - 1);
     return text + spaces;
 }
-
-type Result = {
-    results: string[][]
-}
-function alignmentsV2(params: { strs: string[] | string[][], ctxFont?: string, maxWidth?: number, byteReplacement?: string }): Result {
-    let { maxWidth, strs, byteReplacement = " ", ctxFont = '12px initial' } = params;
+function alignmentsV2(params) {
+    var maxWidth = params.maxWidth, strs = params.strs, _a = params.byteReplacement, byteReplacement = _a === void 0 ? " " : _a, _b = params.ctxFont, ctxFont = _b === void 0 ? '12px initial' : _b;
     // if width not specified
     if (maxWidth == undefined) {
-        let _maxWidth = 0;
-        strs.flat(3).map((str: string) => {
-            const len = getTextWidth(str);
-            if (len > _maxWidth) {
-                _maxWidth = len;
+        var _maxWidth_1 = 0;
+        strs.flat(3).map(function (str) {
+            var len = getTextWidth(str);
+            if (len > _maxWidth_1) {
+                _maxWidth_1 = len;
             }
-        })
-        _maxWidth += 10;
-        maxWidth = _maxWidth;
+        });
+        _maxWidth_1 += 10;
+        maxWidth = _maxWidth_1;
     }
     if (ctx) {
         ctx.font = ctxFont;
     }
-    let isStartWhile = true;
-    const results: string[][] = [];
+    var isStartWhile = true;
+    var results = [];
     while (isStartWhile) {
-        for (let i = 0; i < strs.length; i++) {
+        var _loop_1 = function (i) {
             results[i] = [];
-            const every = strs[i];
-            (every as any).map((content: string, idx: number) => {
-                const outputText = addSpacesToMatchWidth(content, maxWidth as number, byteReplacement);
+            var every = strs[i];
+            every.map(function (content, idx) {
+                var outputText = addSpacesToMatchWidth(content, maxWidth, byteReplacement);
                 results[i][idx] = outputText;
             });
+        };
+        for (var i = 0; i < strs.length; i++) {
+            _loop_1(i);
         }
         isStartWhile = false;
     }
     return {
-        results
-    }
-
+        results: results
+    };
 }
-
 // const strs = [
 //     [
 //         "RUS-CHN骨龄等级",
@@ -112,8 +107,4 @@ function alignmentsV2(params: { strs: string[] | string[][], ctxFont?: string, m
 // }
 // const result = contents.join('\n');
 // console.log(result)
-
-export {
-    alignmentsV2,
-    addSpacesToMatchWidth
-}
+export { alignmentsV2, addSpacesToMatchWidth };
